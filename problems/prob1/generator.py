@@ -57,7 +57,7 @@ def generateNewPriceData():
       randPrice = 1.0 if j == 0 else int(PRICE_RANGE[0] * 10 + getRandomIndex(probPrice)) / 10
       nation = NATION_CASES[i]
       year = YEAR_CASES[j]
-      row = [nation, year, randPrice]
+      row = [year, randPrice]
       results.append(row)
   
   with open(pathA, mode) as file:

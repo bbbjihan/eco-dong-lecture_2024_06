@@ -21,29 +21,30 @@ with open(B_path, mode) as fileB:
     streamB = fileB.readline()
 
 # 선언
-명목GDP = [0, 0, 0]
-실질GDP = [0, 0, 0]
-경제성장률 = [0, 0, 0]
+명목GDP = [0 for _ in range(len(물가정보))]
+실질GDP = [0 for _ in range(len(물가정보))]
+경제성장률 = [0 for _ in range(len(물가정보))]
+startYear = 물가정보[0][0]
+
+print(*list(map(lambda x:str(x[0]) + '년', 물가정보)), sep="\t")
 
 # 명목GDP 구하기
 for 연도,항목,금액 in 거래정보:
   if 항목 == "수입":
-    명목GDP[연도 - 2021] -= 금액
+    명목GDP[연도 - startYear] -= 금액
   else:
-    명목GDP[연도 - 2021] += 금액
-print(*명목GDP)
-# 302 318 286
+    명목GDP[연도 - startYear] += 금액
+print(*명목GDP, sep="\t")
 
 # 실질GDP 구하기
 for 연도,물가지수 in 물가정보:
-  실질GDP[연도 - 2021] = 명목GDP[연도 - 2021] * 물가지수
-print(*실질GDP)
-# 302.0 286.2 314.6
+  실질GDP[연도 - startYear] = int(명목GDP[연도 - startYear] * 물가지수)
+print(*실질GDP, sep="\t")
 
 # 경제성장률 구하기
 for 연도,물가지수 in 물가정보:
-  if 연도 == 2021:
+  if 연도 == startYear:
     continue
-  경제성장률[연도 - 2021] = ((실질GDP[연도 - 2022] - 실질GDP[연도 - 2021]) / 실질GDP[연도 - 2022]) * 100
-print(*경제성장률)
-# 0 5.231788079470203 -9.923130677847672
+  temp = ((실질GDP[연도 - startYear] - 실질GDP[연도 - startYear - 1]) / 실질GDP[연도 - startYear]) * 100
+  경제성장률[연도 - startYear] = int(temp * 10) / 10
+print(*경제성장률, sep="\t")
